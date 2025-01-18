@@ -1,0 +1,40 @@
+---
+import netlify from '../assets/netlify.png'
+import astro from '../assets/astro.png'
+import github from '../assets/nav-github.png'
+import { Image } from 'astro:assets'
+
+const links = [
+    { url: "/colophon", label: "Colophon" },
+    { url: "https://ssr.zmt3.com", label: "SSR" },
+    { url: "https://deno.zmt3.com", label: "Deno" },
+    { url: "https://zubair.click", label: "Amplify" },
+    { url: "https://zubairiz.com", label: "Vercel" },
+  ];
+const madeWithLinks = [
+  { url: 'https://www.astro.build', label: 'Astro', icon: astro },
+  { url: 'https://github.com/2u841r', label: 'GitHub', icon: github },
+  { url: 'https://www.netlify.com', label: 'Netlify', icon: netlify },
+]
+---
+
+<footer class="footer">
+  <section class="footer-section">
+    <nav class="footer-menu">
+      {links.map((link) => (
+        <a href={link.url} target="_blank" rel="noopener noreferrer" key={link.url} class="footer-link">
+          {link.label}
+        </a>
+      ))}
+    </nav>
+    <nav class="footer-menu-buttons">
+      {madeWithLinks.map((link) => (
+        <a href={link.url} title={link.label} target="_blank" rel="noopener noreferrer" key={link.url} class="button small">
+          <Image src={link.icon} alt={link.label} />
+          <span>{link.label}</span>
+        </a>
+      ))}
+    </nav>
+    <div class="footer-made-by" style="color: #969BF6;">Made with ❤️ by Zubair Ibn Zamir</div>
+  </section>
+</footer>

@@ -1,0 +1,17 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  slug?: string;
+}
+
+const { title = "", description = "", slug = "" } = Astro.props;
+---
+
+<h2 class="home-heading">
+  <div>
+    <div class="title">{title}</div>
+    {description && <div class="description">{description}</div>}
+  </div>
+  {slug && <a class="button" href={slug}>View all</a>}
+</h2>

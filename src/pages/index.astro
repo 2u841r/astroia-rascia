@@ -1,11 +1,149 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// Import environment variable for API
+// const API = import.meta.env.PUBLIC_API;
+const API = "https://wp3.zmt3.com/wp-json/wp/v2"
+// Helper function for error handling and data fetching
+const fetchData = async (url) => {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch from ${url}`);
+  return res.json();
+};
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+let latestPosts = [];
+let highlightedPosts = [];
+
+try {
+  // Fetch latest posts
+  latestPosts = await fetchData(`${API}/posts?per_page=5&categories_exclude=3`);
+
+  // Fetch highlighted posts
+  const categoryData = await fetchData(`${API}/categories?slug=Highlight`);
+  
+  if (categoryData.length > 0) {
+    const categoryId = categoryData[0].id;
+    const highlightedPostsData = await fetchData(`${API}/posts?categories=${categoryId}`);
+    
+    // Fetch featured images for highlighted posts
+    highlightedPosts = await Promise.all(
+      highlightedPostsData.map(async (post) => {
+        let featuredImage = null;
+        if (post.featured_media) {
+          try {
+            const mediaData = await fetchData(`${API}/media/${post.featured_media}`);
+            featuredImage = mediaData.source_url;
+          } catch (error) {
+            console.error('Error fetching media:', error);
+          }
+        }
+        return { ...post, featuredImage };
+      })
+    );
+  }
+} catch (error) {
+  console.error('Error fetching data:', error);
+}
+
+// Prepare the data object
+const data = {
+  latestPosts,
+  highlightedPosts
+};
+
+import Welcome from "../components/Welcome.astro";
+import Layout from "../layouts/Layout.astro";
+// Import components with updated paths
+
+import Heading from "../components/Heading.astro";
+import Hero from "../components/Hero.astro";
+// import SEO from "../components/SEO.astro";
+import Projects from "../components/Projects.astro";
+import skillList from "../data/skillList.js";
+import { formatDate } from "../util/helpers.js";
+
+// Get data from props or fetch it in the frontmatter
+// const { data } = Astro.props;
+
 ---
 
+<!-- <SEO /> -->
 <Layout>
-	<Welcome />
+  <main>
+    <div>
+      <div class="container">
+        <div class="hero-wrapper">
+          <Hero title="Zubair Ibn Zamir">
+            <p class="hero-description small width">
+				I'm a MERN Stack Developer, who writes about life, code, Islam and more. Welcome to my digital garden. 🌱
+            </p>
+            <div class="hire-me">
+              <a href="/hire-me" class="button"> Hire Me </a>
+            </div>
+          </Hero>
+          <div class="decoration">
+            <img
+              src="/mernl.png"
+              alt="MERN Logo"
+              class="image hero-image"
+              title="MERN Logo"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <section class="segment first">
+          <Heading title="Latest Posts" slug="/blog" />
+          <div class="posts newspaper">
+            {
+              data.latestPosts.map((post) => (
+                <a class="post" href={`/blog/${post.slug}`}>
+                  <h3>{post.title.rendered}</h3>
+                  <time>{formatDate(post.date, true)}</time>
+                </a>
+              ))
+            }
+          </div>
+        </section>
+        <section class="segment large">
+          <Heading title="Highlights" />
+          <div class="highlight-preview">
+            {
+              data.highlightedPosts.map((hPost) => (
+                <div class="muted card flex">
+                  <div
+                    class="gatsby-image-wrapper"
+                    style="position:relative;overflow:hidden;display:inline-block;width:45px;height:45px"
+                  >
+                    {hPost.featuredImage && (
+                      <img
+                        src={hPost.featuredImage}
+                        alt={hPost.title.rendered}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <time>{formatDate(hPost.date, true)}</time>
+                    <a class="card-header" href={`/blog/${hPost.slug}`}>
+                      {hPost.title.rendered}
+                    </a>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+        <section class="segment large">
+          <Heading title="Skills" />
+          <div class="skill-preview">
+            {skillList.map((skill) => <i class={`${skill} colored`}> </i>)}
+          </div>
+        </section>
+        <Projects />
+      </div>
+    </div>
+  </main>
 </Layout>
+
+<style>
+  /* Add your styles here */
+</style>
+

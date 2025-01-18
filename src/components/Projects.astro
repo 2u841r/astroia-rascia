@@ -1,0 +1,50 @@
+---
+// Update imports to use relative paths
+import projectList from "../Data/projectsList";
+import Heading from "./Heading.astro";
+---
+
+<section class="segment large">
+  <Heading title="Projects" slug="/projects" />
+  <div class="post-preview">
+    {
+      projectList
+        .filter((project) => project.highlight)
+        .map((project) => (
+          <div class="anchored card">
+            <div>
+              <time>{project.date}</time>
+              <a
+                class="card-header"
+                href={`https://github.com/2u841r/${project.slug}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {project.name}
+              </a>
+              <p>{project.tagline}</p>
+            </div>
+
+            <div class="anchored links">
+              {project.writeup && (
+                <a href={project.writeup} class="button flex">
+                  Article
+                </a>
+              )}
+
+              {project.url !== "#" && (
+                <a
+                  class="button flex"
+                  href={project.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Demo
+                </a>
+              )}
+            </div>
+          </div>
+        ))
+    }
+  </div>
+</section>

@@ -1,0 +1,96 @@
+---
+const API = "https://wp3.zmt3.com/wp-json/wp/v2";
+import { hyphenToSpace, capitalizeFirstLetter } from "../../util/helpers";
+import PostSidebar from "../../components/PostSidebar.astro";
+import SidebarLayout from "../../components/SidebarLayout.astro";
+// import SEO from "../../components/SEO.astro";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const API = "https://wp3.zmt3.com/wp-json/wp/v2";
+
+  const response = await fetch(`${API}/posts`);
+  const posts = await response.json();
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+  }));
+}
+
+// Get the slug parameter
+const { slug } = Astro.params;
+
+// Initialize variables
+let post = null;
+let categories = [];
+let tags = [];
+let errorMessage = null;
+let title = "";
+
+try {
+  // Fetch the specific post
+  const postRes = await fetch(`${API}/posts?slug=${slug}`);
+  if (!postRes.ok) throw new Error("Failed to fetch");
+  const posts = await postRes.json();
+
+  if (posts.length === 0) {
+    throw new Error("No Blog Found");
+  }
+
+  post = posts[0];
+  title = post.title.rendered;
+
+  // Fetch categories if post has any
+  if (post.categories?.length) {
+    const categoryIds = post.categories.join(",");
+    const categoriesRes = await fetch(
+      `${API}/categories?include=${categoryIds}`
+    );
+    if (categoriesRes.ok) {
+      categories = await categoriesRes.json();
+    }
+  }
+
+  // Fetch tags if post has any
+  if (post.tags?.length) {
+    const tagIds = post.tags.join(",");
+    const tagsRes = await fetch(`${API}/tags?include=${tagIds}`);
+    if (tagsRes.ok) {
+      tags = await tagsRes.json();
+    }
+  }
+} catch (e) {
+  const formattedSlug = hyphenToSpace(capitalizeFirstLetter(slug));
+  errorMessage = `An error occurred while fetching this blog - ${formattedSlug}`;
+  title = formattedSlug;
+}
+
+// Get current URL for SEO
+const postURL = Astro.url.href;
+---
+
+<Layout>
+  <!-- <SEO postNode={post} postSEO /> -->
+  <main>
+    <SidebarLayout>
+      {
+        errorMessage ? (
+          <section class="segment small">
+            <p class="error">{errorMessage}</p>
+            <p class="error">or Maybe there's a typo in link.</p>
+          </section>
+        ) : (
+          <>
+            <div class="post-header medium width">
+              <h1>{post.title.rendered}</h1>
+            </div>
+            <section class="segment small">
+              <div class="post-content" set:html={post.content.rendered} />
+            </section>
+            <PostSidebar categories={categories} tags={tags} date={post.date} />
+          </>
+        )
+      }
+    </SidebarLayout>
+  </main>
+</Layout>

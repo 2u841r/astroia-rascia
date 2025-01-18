@@ -1,0 +1,99 @@
+---
+import blog from "../assets/nav-blog.png";
+import search from "../assets/nav-search.png";
+import floppy from "../assets/nav-floppy.png";
+import projects from "../assets/nav-projects.png";
+import moon from "../assets/moon.png";
+import sun from "../assets/sun.png";
+import github from "../assets/nav-github.png";
+import { Image } from 'astro:assets';
+
+// Helper function
+const slugify = (str) => {
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
+};
+
+const mainNavItems = [
+  { url: "/", icon: floppy, label: "Home" },
+  { url: "/me", icon: search, label: "About" },
+  { url: "/blog", icon: blog, label: "Blog" },
+  { url: "/projects", icon: projects, label: "Projects" },
+];
+
+const socialNavItems = [
+  { url: "https://github.com/2u841r", icon: github, label: "GitHub" },
+];
+---
+
+<section class="navigation">
+  <div class="container">
+    <nav>
+      {
+        mainNavItems.map((navItem) => (
+          <div class="nav-item-outer">
+            <a href={navItem.url} class={`item home ${slugify(navItem.label)}`}>
+              <Image src={navItem.icon} alt="navIcon" class="nav-image" />
+              <span>{navItem.label}</span>
+            </a>
+          </div>
+        ))
+      }
+      {
+        socialNavItems.map((socialNavItem) => (
+          <div class="nav-item-outer">
+            <a href={socialNavItem.url} class="desktop-only item">
+              <Image src={socialNavItem.icon} alt="navIcon" class="nav-image" />
+              <span>{socialNavItem.label}</span>
+            </a>
+          </div>
+        ))
+      }
+    </nav>
+    <div class="theme-toggle">
+      <button aria-label="Toggle theme">
+        <img src={sun.src} alt="Theme toggle" class="theme-icon" />
+      </button>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ moonSrc: moon.src, sunSrc: sun.src }}>
+  window.addEventListener('load', () => {
+    const themeToggle = document.querySelector('.theme-toggle button');
+    const themeIcon = document.querySelector('.theme-icon');
+    
+    // Get current theme (default is dark)
+    let currentTheme = localStorage.getItem('theme') || 'dark';
+    
+    // Set initial icon
+    if (themeIcon) {
+      themeIcon.src = currentTheme === 'dark' ? sunSrc : moonSrc;
+    }
+    
+    // Theme toggle handler
+    themeToggle?.addEventListener('click', () => {
+      // Toggle theme
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', currentTheme);
+      
+      // Update icon
+      if (themeIcon) {
+        themeIcon.src = currentTheme === 'dark' ? sunSrc : moonSrc;
+      }
+      
+      // Toggle dark mode stylesheet
+      const styleSheets = document.styleSheets;
+      for (let i = 0; i < styleSheets.length; i++) {
+        const styleSheet = styleSheets[i];
+        if (styleSheet.href && styleSheet.href.includes('dark-mode.css')) {
+          styleSheet.disabled = currentTheme === 'light';
+          break;
+        }
+      }
+    });
+  });
+</script>
+

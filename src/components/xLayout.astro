@@ -1,0 +1,16 @@
+---
+import Navigation from './Navigation.astro'
+// import Sidebar from '..components/Sidebar.astro'
+import Footer from './Footer.astro'
+
+
+---
+
+<div id="layout" class="layout">
+  <Navigation />
+  <!-- <Sidebar /> -->
+  <div class="main-wrapper">
+    <div class="main-container">{children}</div>
+    <Footer />
+  </div>
+</div>
