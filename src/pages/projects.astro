@@ -1,0 +1,54 @@
+---
+import ExternalIcon from "../components/ExternalIcon.astro";
+import projectList from "../data/projectsList";
+import Layout from "../layouts/Layout.astro";
+---
+<Layout>
+    <main>
+        <div class="container">
+          <header class="hero">
+            <h1>My Projects</h1>
+          </header>
+        </div>
+      
+        <section class="segment">
+          <div class="container">
+            <div class="project-preview">
+              {projectList.map((project) => (
+                <div class="card anchored large">
+                  <div>
+                    <time>{project.date}</time>
+                    <a
+                      class="card-header"
+                      href={`https://github.com/2u841r/${project.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {project.name}
+                    </a>
+                    <p>{project.tagline}</p>
+                  </div>
+      
+                  <div class="links anchored">
+                    {project.writeup && (
+                      <a href={project.writeup} class="button small flex">
+                        Article
+                      </a>
+                    )}
+                    <a
+                      class="button small flex"
+                      href={project.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Demo <ExternalIcon />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
+      
+</Layout>

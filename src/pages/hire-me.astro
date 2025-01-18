@@ -1,1 +1,50 @@
-hire me
+---
+import Layout from "../layouts/Layout.astro";
+import services from "../data/services";
+---
+<Layout>
+    <div>
+        <div class="container">
+          <div class="hero">
+            <h1>Hire Me</h1>
+          </div>
+          <br />
+          <p>
+            Feel free to contact me by email at <a href="mailto:info+hire@zmt3.com"
+              >info+astro@zmt3.com</a
+            >
+          </p>
+      
+          <section class="segment small">
+            <div class="post-content">
+              <section class="segment">
+                <h2>Services</h2>
+                <div class="post-preview">
+                    {services.map((service) => (
+                      <div class="anchored card">
+                        <div>
+                          <h1>{service.name}</h1>
+                          {service.for !== "Any" && <p>{service.for}</p>}
+                          <!-- <br /> -->
+                        </div>
+                        <div class="anchored links">
+                          <time>{service.fee}</time>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                <br />
+              
+                <p>Please Notice</p>
+                <ul>
+                  <li>All websites are Responsive.</li>
+                  <li>SEO Friendly + Speed Optimized</li>
+                  <li>Domain, Hosting / VPS Not Included.</li>
+                  <li>3 Page per website, then $5-20 per page.</li>
+                </ul>
+              </section>
+            </div>
+          </section>
+        </div>
+      </div>
+</Layout>
