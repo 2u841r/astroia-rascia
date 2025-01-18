@@ -9,7 +9,7 @@ import Layout from "../../layouts/Layout.astro";
 export async function getStaticPaths() {
   const API = "https://wp3.zmt3.com/wp-json/wp/v2";
 
-  const response = await fetch(`${API}/posts`);
+  const response = await fetch(`${API}/posts?per_page=100`);
   const posts = await response.json();
 
   return posts.map((post) => ({
