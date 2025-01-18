@@ -1,4 +1,4 @@
-:root {
+:root.dark {
     --background-color: var(--gray-10);
     --card-background-color: var(--gray-9);
     --star: var(--light-yellow);

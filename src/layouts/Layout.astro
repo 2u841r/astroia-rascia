@@ -17,17 +17,10 @@ import '../styles/dark-mode.css'
     <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
     <title>Astro Basics</title>
     <script is:inline>
-      // Check if user has explicitly set light theme
-      if (localStorage.getItem('theme') === 'light') {
-        // Disable dark mode styles if user prefers light theme
-        const styleSheets = document.styleSheets;
-        for (let i = 0; i < styleSheets.length; i++) {
-          const styleSheet = styleSheets[i];
-          if (styleSheet.href && styleSheet.href.includes('dark-mode.css')) {
-            styleSheet.disabled = true;
-            break;
-          }
-        }
+      // Check localStorage and set initial theme
+      const theme = localStorage.getItem('theme') || 'dark';
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
       }
     </script>
   </head>
