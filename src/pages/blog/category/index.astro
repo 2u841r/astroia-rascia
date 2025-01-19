@@ -1,0 +1,55 @@
+---
+import Hero from "../../../components/Hero.astro";
+import SidebarLayout from "../../../components/SidebarLayout.astro";
+import Layout from "../../../layouts/Layout.astro";
+const API = import.meta.env.PUBLIC_API;
+
+const title = "All Categories";
+let allCategoryData = [];
+let error = null;
+
+try {
+  const allCategoriesResponse = await fetch(`${API}/categories?per_page=100`);
+  if (!allCategoriesResponse.ok) throw new Error("Failed to fetch");
+  allCategoryData = await allCategoriesResponse.json();
+} catch (err) {
+  error = "An error occurred while fetching tags";
+}
+
+// Calculate message
+const message = !allCategoryData
+  ? "No Tag Found"
+  : allCategoryData.length === 1
+    ? `Only ${allCategoryData.length} Category`
+    : `All ${allCategoryData.length} Categories`;
+---
+
+<Layout>
+  <main>
+    <div>
+      <SidebarLayout>
+        {
+          !error ? (
+            <>
+              <Hero title={message} />
+              <section class="segment">
+                {allCategoryData.map((category) => (
+                  <a class="post" href={`/blog/category/${category.slug}`}>
+                    <h3>{category.name}</h3>
+                    <time>
+                      {category.count} {category.count < 2 ? "post" : "posts"}
+                    </time>
+                  </a>
+                ))}
+              </section>
+            </>
+          ) : (
+            <section class="segment small">
+              <p class="error">{error}</p>
+            </section>
+          )
+        }
+      </SidebarLayout>
+    </div>
+  </main>
+</Layout>

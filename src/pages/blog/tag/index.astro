@@ -1,0 +1,55 @@
+---
+import Hero from "../../../components/Hero.astro";
+import SidebarLayout from "../../../components/SidebarLayout.astro"; 
+import Layout from "../../../layouts/Layout.astro";
+const API = import.meta.env.PUBLIC_API;
+
+const title = "All Tags";
+let allTagsData = [];
+let error = null;
+
+try {
+  const allTagsResponse = await fetch(`${API}/tags?per_page=100`);
+  if (!allTagsResponse.ok) throw new Error("Failed to fetch");
+  allTagsData = await allTagsResponse.json();
+} catch (err) {
+  error = "An error occurred while fetching tags";
+}
+
+// Calculate message
+const message = !allTagsData
+  ? "No Tag Found"
+  : allTagsData.length === 1
+    ? `Only ${allTagsData.length} Tag`
+    : `All ${allTagsData.length} Tags`;
+---
+
+<Layout>
+  <main>
+    <div>
+      <SidebarLayout>
+        {
+          !error ? (
+            <>
+              <Hero title={message} />
+              <section class="segment">
+                {allTagsData.map((tag) => (
+                  <a class="post" href={`/blog/tag/${tag.slug}`}>
+                    <h3>{tag.name}</h3>
+                    <time>
+                      {tag.count} {tag.count < 2 ? "post" : "posts"}
+                    </time>
+                  </a>
+                ))}
+              </section>
+            </>
+          ) : (
+            <section class="segment small">
+              <p class="error">{error}</p>
+            </section>
+          )
+        }
+      </SidebarLayout>
+    </div>
+  </main>
+</Layout>

@@ -1,10 +1,11 @@
 ---
-const API = "https://wp3.zmt3.com/wp-json/wp/v2";
-import { hyphenToSpace, capitalizeFirstLetter } from "../../util/helpers";
 import PostSidebar from "../../components/PostSidebar.astro";
 import SidebarLayout from "../../components/SidebarLayout.astro";
 // import SEO from "../../components/SEO.astro";
 import Layout from "../../layouts/Layout.astro";
+import { hyphenToSpace, capitalizeFirstLetter } from "../../util/helpers";
+
+const API = "https://wp3.zmt3.com/wp-json/wp/v2";
 
 export async function getStaticPaths() {
   const API = "https://wp3.zmt3.com/wp-json/wp/v2";

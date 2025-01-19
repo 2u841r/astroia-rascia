@@ -1,0 +1,113 @@
+---
+import Hero from "../../../components/Hero.astro";  
+import SidebarLayout from "../../../components/SidebarLayout.astro";
+import Layout from "../../../layouts/Layout.astro";
+// const API = import.meta.env.PUBLIC_API;
+const API = "https://wp3.zmt3.com/wp-json/wp/v2"
+
+// Import utilities
+import { capitalizeFirstLetter, groupPostsByYear, formatDate } from "../../../util/helpers";  
+
+// Define getStaticPaths for dynamic routing
+export async function getStaticPaths() {
+    try {
+        const API = "https://wp3.zmt3.com/wp-json/wp/v2"
+        const response = await fetch(`${API}/tags?per_page=100`);
+        if (!response.ok) throw new Error("Failed to fetch tags");
+        const tags = await response.json();
+
+        return tags.map((tag) => ({
+            params: { slug: tag.slug },
+        }));
+    } catch (error) {
+        console.error("Error fetching tags:", error);
+        return [];
+    }
+}
+
+// Get the category slug from params
+const { slug } = Astro.params;
+const tagSlug = capitalizeFirstLetter(slug);
+
+// Initialize variables
+let posts = [];
+let tag = null;
+let title = tagSlug;
+let error = null;
+
+try {
+    // Fetch the category details by slug
+    const tagRes = await fetch(`${API}/tags?slug=${tagSlug}`);
+    if (!tagRes.ok) throw new Error("Failed to fetch");
+    const tagData = await tagRes.json();
+
+    if (tagData.length === 0) {
+        error = `The category "${tagSlug}" not Found`;
+        posts = [];
+        tag = null;
+    } else {
+        // Fetch posts for the category
+        const tagId = tagData[0].id;
+        const postsRes = await fetch(`${API}/posts?tags=${tagId}`);
+        if (!postsRes.ok) throw new Error("Failed to fetch");
+        posts = await postsRes.json();
+        tag = tagData[0];
+        title = tag.name;
+    }
+} catch (e) {
+    error = `An error occurred while fetching '${tagSlug}' tag.`;
+    posts = null;
+}
+
+// Calculate message
+const message = !posts?.length 
+    ? " post tagged with:"
+    : posts?.length === 1
+        ? " post tagged with:"
+        : ` posts tagged with:`;
+
+// Group posts by year
+const tagPostsByYear = groupPostsByYear(posts || []);
+---
+
+<!-- <SEO pageTitle={title} /> -->
+<Layout>
+    <main>
+        <div>
+          <SidebarLayout>
+            {!error ? (
+              <>
+                <Hero 
+                  highlight={posts?.length}
+                  subTitle={message}
+                  title={tag?.name}
+                />
+                <section class="segment">
+                  {Object.keys(tagPostsByYear)
+                    .sort((a, b) => b - a)
+                    .map(year => (
+                      <>
+                        <h2 class="year">{year}</h2>
+                        <div class="posts">
+                          {tagPostsByYear[year].map(post => (
+                            <a class="post" href={`/blog/${post.slug}`}>
+                              <h3>{post.title.rendered}</h3>
+                              <time>{formatDate(post.date)}</time>
+                            </a>
+                          ))}
+                        </div>
+                      </>
+                    ))
+                  }
+                </section>
+                <a href="/blog/tag">See all tags</a>
+              </>
+            ) : (
+              <section class="segment small">
+                <p class="error">{error}</p>
+              </section>
+            )}
+          </SidebarLayout>
+        </div>
+      </main>
+</Layout>
