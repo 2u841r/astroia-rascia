@@ -5,11 +5,9 @@ import SidebarLayout from "../../components/SidebarLayout.astro";
 import Layout from "../../layouts/Layout.astro";
 import { hyphenToSpace, capitalizeFirstLetter } from "../../util/helpers";
 
-const API = "https://wp3.zmt3.com/wp-json/wp/v2";
-
+const API = import.meta.env.PUBLIC_API;
 export async function getStaticPaths() {
-  const API = "https://wp3.zmt3.com/wp-json/wp/v2";
-
+  const API = import.meta.env.PUBLIC_API;
   const response = await fetch(`${API}/posts?per_page=100`);
   const posts = await response.json();
 

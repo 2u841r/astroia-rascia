@@ -1,28 +1,33 @@
 ---
-import Hero from "../../../components/Hero.astro";  
+import Hero from "../../../components/Hero.astro";
 import SidebarLayout from "../../../components/SidebarLayout.astro";
 import Layout from "../../../layouts/Layout.astro";
+const API = "https://wp3.zmt3.com/wp-json/wp/v2";
+
 // const API = import.meta.env.PUBLIC_API;
-const API = "https://wp3.zmt3.com/wp-json/wp/v2"
 
 // Import utilities
-import { capitalizeFirstLetter, groupPostsByYear, formatDate } from "../../../util/helpers";  
+import {
+  capitalizeFirstLetter,
+  groupPostsByYear,
+  formatDate,
+} from "../../../util/helpers";
 
 // Define getStaticPaths for dynamic routing
 export async function getStaticPaths() {
-    try {
-        const API = "https://wp3.zmt3.com/wp-json/wp/v2"
-        const response = await fetch(`${API}/categories?per_page=100`);
-        if (!response.ok) throw new Error("Failed to fetch categories");
-        const categories = await response.json();
+  try {
+    const API = "https://wp3.zmt3.com/wp-json/wp/v2";
+    const response = await fetch(`${API}/categories?per_page=100`);
+    if (!response.ok) throw new Error("Failed to fetch categories");
+    const categories = await response.json();
 
-        return categories.map((category) => ({
-            params: { slug: category.slug },
-        }));
-    } catch (error) {
-        console.error("Error fetching categories:", error);
-        return [];
-    }
+    return categories.map((category) => ({
+      params: { slug: category.slug },
+    }));
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
+  }
 }
 
 // Get the category slug from params
@@ -35,35 +40,35 @@ let title = categorySlug;
 let error = null;
 
 try {
-    // Fetch the category details by slug
-    const categoryRes = await fetch(`${API}/categories?slug=${categorySlug}`);
-    if (!categoryRes.ok) throw new Error("Failed to fetch");
-    const categoryData = await categoryRes.json();
+  // Fetch the category details by slug
+  const categoryRes = await fetch(`${API}/categories?slug=${categorySlug}`);
+  if (!categoryRes.ok) throw new Error("Failed to fetch");
+  const categoryData = await categoryRes.json();
 
-    if (categoryData.length === 0) {
-        error = `The category "${categorySlug}" not Found`;
-        posts = [];
-        category = null;
-    } else {
-        // Fetch posts for the category
-        const categoryId = categoryData[0].id;
-        const postsRes = await fetch(`${API}/posts?categories=${categoryId}`);
-        if (!postsRes.ok) throw new Error("Failed to fetch");
-        posts = await postsRes.json();
-        category = categoryData[0];
-        title = category.name;
-    }
+  if (categoryData.length === 0) {
+    error = `The category "${categorySlug}" not Found`;
+    posts = [];
+    category = null;
+  } else {
+    // Fetch posts for the category
+    const categoryId = categoryData[0].id;
+    const postsRes = await fetch(`${API}/posts?categories=${categoryId}`);
+    if (!postsRes.ok) throw new Error("Failed to fetch");
+    posts = await postsRes.json();
+    category = categoryData[0];
+    title = category.name;
+  }
 } catch (e) {
-    error = `An error occurred while fetching '${categorySlug}' category.`;
-    posts = null;
+  error = `An error occurred while fetching '${categorySlug}' category.`;
+  posts = null;
 }
 
 // Calculate message
-const message = !posts?.length 
+const message = !posts?.length
+  ? " post categorized as:"
+  : posts?.length === 1
     ? " post categorized as:"
-    : posts?.length === 1
-        ? " post categorized as:"
-        : ` posts categorized as:`;
+    : ` posts categorized as:`;
 
 // Group posts by year
 const categoryPostsByYear = groupPostsByYear(posts || []);
@@ -71,42 +76,43 @@ const categoryPostsByYear = groupPostsByYear(posts || []);
 
 <!-- <SEO pageTitle={title} /> -->
 <Layout>
-    <main>
-        <div>
-          <SidebarLayout>
-            {!error ? (
-              <>
-                <Hero 
-                  highlight={posts?.length}
-                  subTitle={message}
-                  title={category?.name}
-                />
-                <section class="segment">
-                  {Object.keys(categoryPostsByYear)
-                    .sort((a, b) => b - a)
-                    .map(year => (
-                      <>
-                        <h2 class="year">{year}</h2>
-                        <div class="posts">
-                          {categoryPostsByYear[year].map(post => (
-                            <a class="post" href={`/blog/${post.slug}`}>
-                              <h3>{post.title.rendered}</h3>
-                              <time>{formatDate(post.date)}</time>
-                            </a>
-                          ))}
-                        </div>
-                      </>
-                    ))
-                  }
-                </section>
-                <a href="/blog/category">See all categories</a>
-              </>
-            ) : (
-              <section class="segment small">
-                <p class="error">{error}</p>
+  <main>
+    <div>
+      <SidebarLayout>
+        {
+          !error ? (
+            <>
+              <Hero
+                highlight={posts?.length}
+                subTitle={message}
+                title={category?.name}
+              />
+              <section class="segment">
+                {Object.keys(categoryPostsByYear)
+                  .sort((a, b) => b - a)
+                  .map((year) => (
+                    <>
+                      <h2 class="year">{year}</h2>
+                      <div class="posts">
+                        {categoryPostsByYear[year].map((post) => (
+                          <a class="post" href={`/blog/${post.slug}`}>
+                            <h3>{post.title.rendered}</h3>
+                            <time>{formatDate(post.date)}</time>
+                          </a>
+                        ))}
+                      </div>
+                    </>
+                  ))}
               </section>
-            )}
-          </SidebarLayout>
-        </div>
-      </main>
+              <a href="/blog/category">See all categories</a>
+            </>
+          ) : (
+            <section class="segment small">
+              <p class="error">{error}</p>
+            </section>
+          )
+        }
+      </SidebarLayout>
+    </div>
+  </main>
 </Layout>
