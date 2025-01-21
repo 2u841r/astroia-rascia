@@ -1,14 +1,23 @@
-# Astro Starter Kit: Basics
+Source code of [astro.zmt3.com](https://astro.zmt3.com), originally created by [Tania Rascia](https://github.com/taniarascia/taniarascia.com) in Gatsby+Markdown, I converted it to Astro.
 
-```sh
-npm create astro@latest -- --template basics
+previously to [Svelte+Wordpress-API](https://github.com/2u841r/zmt3.com) 
+and [Nuxt](https://github.com/2u841r/nuxt.zmt3.com/)
+
+My future plan is- 
+[x] Svelte version of this site. 
+[x] Vue/Nuxt version of this site. 
+[] Convert css to TailwindCSS. 
+
+## Instruction 
+create a .env file bofore `npm run dev`, 
+```txt
+PUBLIC_API=https://yoursite.tld/wp-json/wp/v2
 ```
+Its wordpress rest api link. feel free to change / use this src code for Markdown files. 
+If you don't have wordpress site, find a website with wordpress, then visit that-sites-name.com/wp-json/wp/v2/posts 
+If you get posts, use that for test :-) 
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Astro will visit each post, tag, category and make static files.  
 
 ![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
 
