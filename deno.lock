@@ -2275,8 +2275,7 @@
         "npm:@deno/astro-adapter@0.2",
         "npm:astro@^5.1.7",
         "npm:prettier-plugin-astro@~0.14.1",
-        "npm:prettier@^3.4.2",
-        "npm:sharp@~0.33.5"
+        "npm:prettier@^3.4.2"
       ]
     }
   }
