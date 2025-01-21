@@ -7,7 +7,7 @@ import Hero from "../components/Hero.astro";
 // import SEO from "../components/SEO.astro";
 import Projects from "../components/Projects.astro";
 import skillList from "../data/skillList.js";
-import { formatDate, getApiUrl } from "../util/helpers.js";
+import { formatDate } from "../util/helpers.js";
 // Get data from props or fetch it in the frontmatter
 // const { data } = Astro.props;
 // Import environment variable for API
@@ -69,7 +69,6 @@ const data = {
       <div class="container">
         <div class="hero-wrapper">
           <Hero title="Zubair Ibn Zamir">
-            <h2> {getApiUrl()} </h2>
             <p class="hero-description small width">
 				I'm a MERN Stack Developer, who writes about life, code, Islam and more. Welcome to my digital garden. 🌱
             </p>
