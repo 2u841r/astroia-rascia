@@ -7,7 +7,7 @@ import Hero from "../components/Hero.astro";
 // import SEO from "../components/SEO.astro";
 import Projects from "../components/Projects.astro";
 import skillList from "../data/skillList.js";
-import { formatDate, getApiUrl } from "../util/helpers.js";
+import { formatDate } from "../util/helpers.js";
 // Get data from props or fetch it in the frontmatter
 // const { data } = Astro.props;
 // Import environment variable for API
@@ -28,21 +28,25 @@ try {
 
   // Fetch highlighted posts
   const categoryData = await fetchData(`${API}/categories?slug=Highlight`);
-  
+
   if (categoryData.length > 0) {
     const categoryId = categoryData[0].id;
-    const highlightedPostsData = await fetchData(`${API}/posts?categories=${categoryId}`);
-    
+    const highlightedPostsData = await fetchData(
+      `${API}/posts?categories=${categoryId}`
+    );
+
     // Fetch featured images for highlighted posts
     highlightedPosts = await Promise.all(
       highlightedPostsData.map(async (post) => {
         let featuredImage = null;
         if (post.featured_media) {
           try {
-            const mediaData = await fetchData(`${API}/media/${post.featured_media}`);
+            const mediaData = await fetchData(
+              `${API}/media/${post.featured_media}`
+            );
             featuredImage = mediaData.source_url;
           } catch (error) {
-            console.error('Error fetching media:', error);
+            console.error("Error fetching media:", error);
           }
         }
         return { ...post, featuredImage };
@@ -50,16 +54,14 @@ try {
     );
   }
 } catch (error) {
-  console.error('Error fetching data:', error);
+  console.error("Error fetching data:", error);
 }
 
 // Prepare the data object
 const data = {
   latestPosts,
-  highlightedPosts
+  highlightedPosts,
 };
-
-
 ---
 
 <!-- <SEO /> -->
@@ -69,9 +71,9 @@ const data = {
       <div class="container">
         <div class="hero-wrapper">
           <Hero title="Zubair Ibn Zamir">
-            <h2> {getApiUrl()} </h2>
             <p class="hero-description small width">
-				I'm a MERN Stack Developer, who writes about life, code, Islam and more. Welcome to my digital garden. 🌱
+              I'm a MERN Stack Developer, who writes about life, code, Islam and
+              more. Welcome to my digital garden. 🌱
             </p>
             <div class="hire-me">
               <a href="/hire-me" class="button"> Hire Me </a>
@@ -144,4 +146,3 @@ const data = {
 <style>
   /* Add your styles here */
 </style>
-
