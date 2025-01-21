@@ -85,7 +85,7 @@ export function slugify(string) {
   )
 }
 
-const API = import.meta.env.PUBLIC_API;
+const API = "https://wp3.zmt3.com/wp-json/wp/v2";
 export function getApiUrl() {
   return API;
 }
