@@ -2,7 +2,6 @@
 import SidebarLayout from "../components/SidebarLayout.astro";
 import Layout from "../layouts/Layout.astro";
 // import SEO from "$lib/components/SEO.svelte";
-const API = import.meta.env.PUBLIC_API;
 ---
 
 <!-- <SEO pageTitle="About Me" /> -->
@@ -12,7 +11,6 @@ const API = import.meta.env.PUBLIC_API;
       <SidebarLayout>
         <div class="hero">
           <h1>About Me</h1>
-          <h2> {`${API}/posts?per_page=100`} </h2>
         </div>
         <section class="segment small">
           <div class="post-content">
