@@ -13,11 +13,15 @@ create a .env file bofore `npm run dev`,
 ```txt
 PUBLIC_API=https://yoursite.tld/wp-json/wp/v2
 ```
-Its wordpress rest api link. feel free to change / use this src code for Markdown files. 
-If you don't have wordpress site, find a website with wordpress, then visit that-sites-name.com/wp-json/wp/v2/posts 
-If you get posts, use that for test :-) 
+Its wordpress rest api link. Astro will visit each post, tag, category and make static files. you can see that in terminal in build process/ `npm run build`
 
-Astro will visit each post, tag, category and make static files.  
+feel free to change / use this src code for Markdown files. 
+
+If you don't have wordpress site, find a website with wordpress, then visit that-sites-name.com/wp-json/wp/v2/posts 
+
+If you get posts, use that link for test :-) 
+or ask me (email available at /me route), I will give you my wordpress link. 
+
 
 ![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
 
