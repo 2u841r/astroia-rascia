@@ -7,8 +7,7 @@ import { hyphenToSpace, capitalizeFirstLetter } from "../../util/helpers";
 
 const API = import.meta.env.PUBLIC_API;
 export async function getStaticPaths() {
-  const API = import.meta.env.PUBLIC_API;
-  const response = await fetch(`${API}/posts?per_page=100`);
+  const response = await fetch(`${import.meta.env.PUBLIC_API}/posts?per_page=100`);
   const posts = await response.json();
 
   return posts.map((post) => ({

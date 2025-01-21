@@ -1,6 +1,5 @@
 ---
 // Import environment variable
-const API = "https://wp3.zmt3.com/wp-json/wp/v2"
 // Import components and utilities with updated paths
 import SidebarLayout from "../../components/SidebarLayout.astro";
 import Layout from "../../layouts/Layout.astro";
@@ -13,7 +12,7 @@ let error = null;
 const title = 'All Blogs';
 
 try {
-  const wpres = await fetch(`${API}/posts?per_page=100`);
+  const wpres = await fetch(`${import.meta.env.PUBLIC_API}/posts?per_page=100`);
   if (!wpres.ok) throw new Error('Failed to fetch');
   wppost = await wpres.json();
 } catch (e) {

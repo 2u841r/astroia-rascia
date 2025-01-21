@@ -2,22 +2,19 @@
 import Hero from "../../../components/Hero.astro";
 import SidebarLayout from "../../../components/SidebarLayout.astro";
 import Layout from "../../../layouts/Layout.astro";
-// const API = import.meta.env.PUBLIC_API;
-const API = "https://wp3.zmt3.com/wp-json/wp/v2"
-
 
 // Import utilities
 import {
   capitalizeFirstLetter,
   groupPostsByYear,
   formatDate,
+  getApiUrl,
 } from "../../../util/helpers";
 
 // Define getStaticPaths for dynamic routing
 export async function getStaticPaths() {
   try {
-    const API = "https://wp3.zmt3.com/wp-json/wp/v2";  
-    const response = await fetch(`${API}/tags?per_page=100`);
+    const response = await fetch(`${import.meta.env.PUBLIC_API}/tags?per_page=100`);
     if (!response.ok) throw new Error("Failed to fetch tags");
     const tags = await response.json();
 
@@ -29,6 +26,8 @@ export async function getStaticPaths() {
     return [];
   }
 }
+
+const API = import.meta.env.PUBLIC_API;
 
 // Get the category slug from params
 const { slug } = Astro.params;
