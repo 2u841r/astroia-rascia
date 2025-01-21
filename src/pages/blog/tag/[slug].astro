@@ -14,7 +14,8 @@ import {
 // Define getStaticPaths for dynamic routing
 export async function getStaticPaths() {
   try {
-    const response = await fetch(`${import.meta.env.PUBLIC_API}/tags?per_page=100`);
+    const API = import.meta.env.PUBLIC_API; 
+    const response = await fetch(`${API}/tags?per_page=100`);
     if (!response.ok) throw new Error("Failed to fetch tags");
     const tags = await response.json();
 

@@ -13,7 +13,8 @@ import {
 // Define getStaticPaths for dynamic routing
 export async function getStaticPaths() {
   try {
-    const response = await fetch(`${import.meta.env.PUBLIC_API}/categories?per_page=100`);
+    const API = import.meta.env.PUBLIC_API; 
+    const response = await fetch(`${API}/categories?per_page=100`);
     if (!response.ok) throw new Error("Failed to fetch categories");
     const categories = await response.json();
 
