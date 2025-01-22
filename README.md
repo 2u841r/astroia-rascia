@@ -1,9 +1,9 @@
 source code of astro.zmt3.com, originally created by [Tania Rascia](https://github.com/taniarascia/taniarascia.com) in Gatsby+Markdown, I converted it to Astro.
-previously to previously to [Svelte+Wordpress-API](https://github.com/2u841r/zmt3.com) and [Nuxt](https://github.com/2u841r/nuxt.zmt3.com/).
+previously to previously to [Svelte+Wordpress-API](https://github.com/2u841r/zmt3.com) and [Nuxt](https://github.com/2u841r/nuxtia-rascia/).
 
 My future plan is 
 - [x] [Svelte](https://github.com/2u841r/zmt3.com) version of this site. 
-- [x] [Vue-Nuxt](https://github.com/2u841r/nuxt.zmt3.com/) version of this site. 
+- [x] [Vue-Nuxt](https://github.com/2u841r/nuxtia-rascia/) version of this site. 
 - [ ] Convert CSS to Tailwind CSS.
 
 Instruction
