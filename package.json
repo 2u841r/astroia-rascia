@@ -9,7 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.1.7"
+    "astro": "^5.1.7",
+    "sharp": "^0.34.2"
   },
   "devDependencies": {
     "prettier": "^3.4.2",
