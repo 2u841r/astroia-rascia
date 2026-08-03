@@ -1,0 +1,5 @@
+allowBuilds:
+  esbuild: set this to true or false
+  sharp: set this to true or false
+overrides:
+  postcss@<8.5.18: '>=8.5.18'
