@@ -3,3 +3,7 @@ allowBuilds:
   sharp: set this to true or false
 overrides:
   postcss@<8.5.18: '>=8.5.18'
+  svgo@<4.1.0: '>=4.1.0'
+  js-yaml@<4.3.0: '>=4.3.0'
+  nanoid@<3.3.18: '>=3.3.18'
+  smol-toml@<1.7.1: '>=1.7.1'
